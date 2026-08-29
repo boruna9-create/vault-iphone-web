@@ -1,0 +1,21 @@
+name: Vault
+options:
+  bundleIdPrefix: com.adrian
+settings:
+  base:
+    IPHONEOS_DEPLOYMENT_TARGET: 17.0
+targets:
+  Vault:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - Vault
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.adrian.vault
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Vault
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        CODE_SIGN_STYLE: Automatic
