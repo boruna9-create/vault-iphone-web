@@ -4,7 +4,7 @@ module.exports=async function handler(req,res){
   const url=req.body?.url;
   if(!url||!/^https?:\/\//i.test(url)) return res.status(400).json({error:'Enter a valid URL'});
   try{
-    const cr=await fetch(COBALT,{method:'POST',headers:{Accept:'application/json','Content-Type':'application/json'},body:JSON.stringify({url,vCodec:'h264',vQuality:'1080',alwaysProxy:true})});
+    const cr=await fetch(COBALT,{method:'POST',headers:{Accept:'application/json','Content-Type':'application/json'},body:JSON.stringify({url,videoQuality:'1080',downloadMode:'auto',youtubeVideoCodec:'h264',youtubeVideoContainer:'mp4',alwaysProxy:true})});
     const data=await cr.json();
     if(!cr.ok||data.status==='error') return res.status(400).json({error:data?.error?.code||'Cobalt could not process this link'});
     let mediaUrl,filename=data.filename||`Vault-${Date.now()}.mp4`;
