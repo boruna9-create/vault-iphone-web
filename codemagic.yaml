@@ -1,6 +1,6 @@
 workflows:
   vault-ios:
-    name: Vault iOS
+    name: Vault iOS Device Package
     instance_type: mac_mini_m2
     max_build_duration: 30
     environment:
@@ -11,9 +11,24 @@ workflows:
           cd ios
           brew install xcodegen || true
           xcodegen generate
-      - name: Build Vault for iOS Simulator
+      - name: Build unsigned Vault for iPhone
         script: |
           cd ios
-          xcodebuild -project Vault.xcodeproj -scheme Vault -sdk iphonesimulator -configuration Release CODE_SIGNING_ALLOWED=NO build
+          rm -rf build Payload Vault-unsigned.ipa
+          xcodebuild \
+            -project Vault.xcodeproj \
+            -scheme Vault \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build
+          APP_PATH=$(find build/Build/Products/Release-iphoneos -maxdepth 1 -name '*.app' -type d | head -1)
+          test -n "$APP_PATH"
+          mkdir -p Payload
+          cp -R "$APP_PATH" Payload/
+          zip -qry Vault-unsigned.ipa Payload
     artifacts:
-      - ios/build/**
+      - ios/Vault-unsigned.ipa
